@@ -9,7 +9,7 @@ Java 21 · Spring Boot 3.5.13 · Spring Data JPA · H2 · Lombok
 ## Parte de un sistema mayor
 | Repositorio | Descripción | Estado |
 |---|---|---|
-| [apicultura-consola](https://github.com/OAlvarezOliveira/apicultura-consola) | Prototipo Java consola | ✅ Fase 1 |
+| [apicultura-consola](https://github.com/OAlvarezOliveira/ApiculturaApp) | Prototipo Java consola | ✅ Fase 1 |
 | [apicultura-api](https://github.com/OAlvarezOliveira/apicultura-api) | REST API Spring Boot | 🚧 En desarrollo |
 | apicultura-desktop | Cliente JavaFX | ⏳ Pendiente |
 | apicultura-android | App Android campo | ⏳ Pendiente |
