@@ -30,3 +30,17 @@ Consola H2 en `http://localhost:8080/h2-console`
 - Dependencias: Web, JPA, H2, Lombok, Validation
 - application.properties configurado
 - Primer arranque exitoso — Tomcat en puerto 8080
+
+
+### Sesión 2 — 10/04/2026
+
+- Instalación y configuración de Lombok en Eclipse
+- Primera entidad JPA `Colmena` — de clase Java a tabla en H2 automáticamente
+- Enums `EstadoColmena` y `TipoAlza` con `@Enumerated(EnumType.STRING)`
+- Entidad `Revision` con relación `@ManyToOne` hacia `Colmena`
+- Relación bidireccional `@OneToMany` con cascade y orphanRemoval
+- `ColmenaRepository` extendiendo `JpaRepository` — 0 líneas de SQL escritas
+- `ColmenaService` con lógica de negocio — estado calculado automáticamente
+- `ColmenaController` con endpoints GET y POST funcionales
+- Primera revisión registrada y verificada en H2 en tiempo real
+- Concepto clave aprendido: inyección de dependencias con `@RequiredArgsConstructor`
