@@ -25,7 +25,7 @@ Consola H2 en `http://localhost:8080/h2-console`
 
 ## 📓 Diario de desarrollo
 
-### Sesión 1 — 10/04/2026
+### Sesión 1 — 09/04/2026
 - Setup proyecto Maven con Spring Tools en Eclipse
 - Dependencias: Web, JPA, H2, Lombok, Validation
 - application.properties configurado
