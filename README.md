@@ -53,4 +53,9 @@ Consola H2 en `http://localhost:8080/h2-console`
 - `GlobalExceptionHandler` intercepta todas las excepciones en un solo sitio
 - Códigos HTTP con significado real: 201 Created, 404 Not Found, 409 Conflict
 - `ResponseEntity` para controlar la respuesta HTTP completa
-- Concepto clave aprendido: no todo es 200 OK
+- DTOs con `ColmenaResponse` y `ColmenaMapper`
+- Campos calculados en el DTO: `necesitaTratamiento`, `totalRevisiones`, `fechaUltimaRevision`
+- Principio de responsabilidad única aplicado
+- Concepto clave aprendido: no exponer entidades JPA directamente en la API
+
+
