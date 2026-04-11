@@ -1,6 +1,6 @@
 package com.apicultura.controller;
 
-import com.apicultura.model.Colmena;
+import com.apicultura.dto.ColmenaResponse;
 import com.apicultura.model.Revision;
 import com.apicultura.service.ColmenaService;
 import lombok.RequiredArgsConstructor;
@@ -17,18 +17,18 @@ public class ColmenaController {
 	private final ColmenaService colmenaService;
 
 	@GetMapping
-	public List<Colmena> listar() {
+	public List<ColmenaResponse> listar() {
 		return colmenaService.listarTodas();
 	}
 
 	@PostMapping("/{numero}")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Colmena crear(@PathVariable Integer numero) {
+	public ColmenaResponse crear(@PathVariable Integer numero) {
 	    return colmenaService.crear(numero);
 	}
 
 	@PostMapping("/{numero}/revisiones")
-	public Colmena registrarRevision(@PathVariable Integer numero, @RequestBody Revision revision) {
+	public ColmenaResponse registrarRevision(@PathVariable Integer numero, @RequestBody Revision revision) {
 		return colmenaService.registrarRevision(numero, revision);
 	}
 }

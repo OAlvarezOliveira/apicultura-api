@@ -1,63 +1,68 @@
 package com.apicultura.service;
 
-import com.apicultura.exception.ColmenaNotFoundException;
-import com.apicultura.exception.ColmenaYaExisteException;
-import com.apicultura.model.Colmena;
-import com.apicultura.model.Revision;
-import com.apicultura.model.enums.EstadoColmena;
-import com.apicultura.repository.ColmenaRepository;
-
-import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
+import com.apicultura.model.Colmena;
+import com.apicultura.model.Revision;
+import com.apicultura.model.enums.EstadoColmena;
+import com.apicultura.dto.ColmenaResponse;
+import com.apicultura.dto.ColmenaMapper;
+import com.apicultura.exception.ColmenaNotFoundException;
+import com.apicultura.exception.ColmenaYaExisteException;
+import com.apicultura.repository.ColmenaRepository;
+
 @Service
-@RequiredArgsConstructor
 public class ColmenaService {
 
-	private final ColmenaRepository colmenaRepo;
+    private final ColmenaRepository colmenaRepo;
+    private final ColmenaMapper colmenaMapper;
 
-	public List<Colmena> listarTodas() {
-		return colmenaRepo.findAll();
-	}
+    public ColmenaService(ColmenaRepository colmenaRepo, ColmenaMapper colmenaMapper) {
+        this.colmenaRepo = colmenaRepo;
+        this.colmenaMapper = colmenaMapper;
+    }
 
-	public Colmena crear(Integer numero) {
-	    if (colmenaRepo.existsById(numero)) {
-	        throw new ColmenaYaExisteException(numero);
-	    }
-	    return colmenaRepo.save(new Colmena(numero));
-	}
-	
-	public Colmena buscarPorNumero(Integer numero) {
-	    return colmenaRepo.findById(numero)
-	            .orElseThrow(() -> new ColmenaNotFoundException(numero));
-	}
+    public List<ColmenaResponse> listarTodas() {
+        return colmenaRepo.findAll().stream()
+                .map(colmenaMapper::toResponse)
+                .toList();
+    }
 
-	@Transactional
-	public Colmena registrarRevision(Integer numero, Revision revision) {
-	    Colmena colmena = buscarPorNumero(numero);
+    public ColmenaResponse buscarPorNumero(Integer numero) {
+        Colmena colmena = colmenaRepo.findById(numero)
+                .orElseThrow(() -> new ColmenaNotFoundException(numero));
+        return colmenaMapper.toResponse(colmena);
+    }
 
-		EstadoColmena estado;
-		if (!revision.isTieneReina())
-			estado = EstadoColmena.SIN_REINA;
-		else if (revision.getCuadrosCria() >= 4)
-			estado = EstadoColmena.BUENA;
-		else
-			estado = EstadoColmena.DEBIL;
+    public ColmenaResponse crear(Integer numero) {
+        if (colmenaRepo.existsById(numero)) {
+            throw new ColmenaYaExisteException(numero);
+        }
+        return colmenaMapper.toResponse(colmenaRepo.save(new Colmena(numero)));
+    }
 
-		revision.setEstado(estado);
-		revision.setFecha(LocalDate.now());
-		colmena.agregarRevision(revision);
+    public ColmenaResponse registrarRevision(Integer numero, Revision revision) {
+        Colmena colmena = colmenaRepo.findById(numero)
+                .orElseThrow(() -> new ColmenaNotFoundException(numero));
 
-		colmena.setCuadrosCria(revision.getCuadrosCria());
-		colmena.setReservasMiel(revision.getReservasMiel());
-		colmena.setEstado(estado);
-		colmena.setTieneReina(revision.isTieneReina());
-		colmena.setNivelVarroa(revision.getNivelVarroa());
+        EstadoColmena estado;
+        if (!revision.isTieneReina())            estado = EstadoColmena.SIN_REINA;
+        else if (revision.getCuadrosCria() >= 4) estado = EstadoColmena.BUENA;
+        else                                     estado = EstadoColmena.DEBIL;
 
-		return colmenaRepo.save(colmena);
-	}
+        revision.setEstado(estado);
+        revision.setFecha(LocalDate.now());
+        colmena.agregarRevision(revision);
+
+        colmena.setCuadrosCria(revision.getCuadrosCria());
+        colmena.setReservasMiel(revision.getReservasMiel());
+        colmena.setEstado(estado);
+        colmena.setTieneReina(revision.isTieneReina());
+        colmena.setNivelVarroa(revision.getNivelVarroa());
+
+        return colmenaMapper.toResponse(colmenaRepo.save(colmena));
+    }
 }
