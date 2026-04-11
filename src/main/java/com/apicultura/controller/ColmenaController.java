@@ -6,6 +6,8 @@ import com.apicultura.service.ColmenaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.http.HttpStatus;
 
 @RestController
 @RequestMapping("/api/colmenas")
@@ -20,8 +22,9 @@ public class ColmenaController {
 	}
 
 	@PostMapping("/{numero}")
+	@ResponseStatus(HttpStatus.CREATED)
 	public Colmena crear(@PathVariable Integer numero) {
-		return colmenaService.crear(numero);
+	    return colmenaService.crear(numero);
 	}
 
 	@PostMapping("/{numero}/revisiones")

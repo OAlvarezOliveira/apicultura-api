@@ -1,5 +1,7 @@
 package com.apicultura.service;
 
+import com.apicultura.exception.ColmenaNotFoundException;
+import com.apicultura.exception.ColmenaYaExisteException;
 import com.apicultura.model.Colmena;
 import com.apicultura.model.Revision;
 import com.apicultura.model.enums.EstadoColmena;
@@ -23,16 +25,20 @@ public class ColmenaService {
 	}
 
 	public Colmena crear(Integer numero) {
-		if (colmenaRepo.existsById(numero)) {
-			throw new RuntimeException("La colmena #" + numero + " ya existe");
-		}
-		return colmenaRepo.save(new Colmena(numero));
+	    if (colmenaRepo.existsById(numero)) {
+	        throw new ColmenaYaExisteException(numero);
+	    }
+	    return colmenaRepo.save(new Colmena(numero));
+	}
+	
+	public Colmena buscarPorNumero(Integer numero) {
+	    return colmenaRepo.findById(numero)
+	            .orElseThrow(() -> new ColmenaNotFoundException(numero));
 	}
 
 	@Transactional
 	public Colmena registrarRevision(Integer numero, Revision revision) {
-		Colmena colmena = colmenaRepo.findById(numero)
-				.orElseThrow(() -> new RuntimeException("Colmena #" + numero + " no encontrada"));
+	    Colmena colmena = buscarPorNumero(numero);
 
 		EstadoColmena estado;
 		if (!revision.isTieneReina())
